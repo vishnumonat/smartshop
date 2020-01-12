@@ -1,0 +1,7 @@
+from dbConnector import *
+
+def main():
+	make_connection("localhost", "smartshop", "root", "raspberrypi" )
+
+if __name__ ==  '__main__':
+	main()
