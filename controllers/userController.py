@@ -10,13 +10,11 @@ users = Blueprint('users', __name__)
 def get():
 	"""List all registered users"""
 	users = repository.get_all_users()
-	usersjson = list(map(lambda user: json.dumps(user.__dict__), users))
-	return Response(usersjson, mimetype="application/json", status=200)
+	return Response(json.dumps([user for user in users]), mimetype="application/json", status=200)
 
 
 @users.route('/users', methods=['POST'])
 def add_user():
-	body = request.get_json()
-	print(body)
+	body = request.json
 	id = repository.insert_user(body)
 	return jsonify(id), 200
