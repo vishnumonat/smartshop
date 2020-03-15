@@ -29,3 +29,10 @@ def on_connect():
 	barcode = listen_for_barcode()
 	print(barcode)
 	emit('scanned_barcode', {'barcode': barcode}, broadcast=True)
+
+@socket.on('scan_item')
+def on_connect():
+	print('user connected')
+	barcode = listen_for_barcode()
+	print(barcode)
+	emit('scanned_item', repository.get_item_by_column('barcodeid', barcode), broadcast=True)
