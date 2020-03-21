@@ -1,4 +1,37 @@
+from threading import Timer
 
+
+import datetime  # only needed for example usage...
+from datetime import timedelta  # only needed for example usage...
+import time  # only needed for example usage...
+
+def debounce(wait):
+    """Postpone a functions execution until after some time has elapsed
+ 
+    :type wait: int
+    :param wait: The amount of Seconds to wait before the next call can execute.
+    """
+ 
+    def decorator(fun):
+        def debounced(*args, **kwargs):
+            def call_it():
+                fun(*args, **kwargs)
+ 
+            try:
+                debounced.t.cancel()
+            except AttributeError:
+                pass
+ 
+            debounced.t = Timer(wait, call_it)
+            debounced.t.start()
+ 
+        return debounced
+ 
+    return decorator
+
+
+
+# @debounce(100)
 def listen_for_barcode():
     import sys
 
@@ -13,7 +46,6 @@ def listen_for_barcode():
 
     done = False
     while not done:
-
         ## Get the character from the HID
         buffer = fp.read(8)
         for c in buffer:

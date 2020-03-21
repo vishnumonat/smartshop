@@ -20,3 +20,7 @@ def close_connection(connection):
 		connection.close()
 		print("Mysql connection closed")
 
+
+
+
+

@@ -3,7 +3,7 @@ from flask import Blueprint, Response, request, jsonify
 from extentions import socket
 from flask_restplus import Resource
 from repository.itemRepository import ItemRepository
-from flask_socketio import emit
+from flask_socketio import emit, disconnect
 from utils.barcodeUtils import listen_for_barcode
 
 repository = ItemRepository()
@@ -19,20 +19,31 @@ def get():
 @items.route('/items', methods=['POST'])
 def add_item():
 	body = request.json
+	print(request.json)
 	id = repository.insert_item(body)
 	return jsonify(id), 200
 
 
 @socket.on('scan_barcode')
 def on_connect():
-	print('user connected')
+	print('scan_barcode sid', request.sid)
+	print('scan_barcode socket reopened')
 	barcode = listen_for_barcode()
 	print(barcode)
-	emit('scanned_barcode', {'barcode': barcode}, broadcast=True)
+	emit('scanned_barcode', {'barcode': barcode})
 
 @socket.on('scan_item')
 def on_connect():
-	print('user connected')
+	print('scan_item sid', request.sid)
+	print('scan_item socket reopened')
 	barcode = listen_for_barcode()
 	print(barcode)
-	emit('scanned_item', repository.get_item_by_column('barcodeid', barcode), broadcast=True)
+	item = repository.get_item_by_column('barcodeid', barcode)
+	if(item != None):
+		emit('scanned_item', item)
+
+
+# @socket.on('disconnect')
+# def test_disconnect():
+# 	print('disconnect sid', request.sid)
+# 	disconnect(request.sid.encode())
