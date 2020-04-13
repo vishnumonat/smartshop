@@ -20,7 +20,12 @@ class UserRepository:
 			query = "SELECT * from users WHERE {}=\'{}\'".format(column_name, value)
 			cursor.execute(query)
 			result = cursor.fetchone()
-			return User(result[0], result[1], result[2], result[3])
+			print(query)
+			print(result)
+			# if(result != None):
+			# 	return User(result[0], result[1], result[2],  result[3])
+			# else:
+			return result
 		except Error as e:
 			print('Sql connection Error: {}'.format(e))
 			return null
@@ -29,7 +34,7 @@ class UserRepository:
 		try:
 			connection = mysql.connection
 			cursor = connection.cursor()
-			query = "Insert into users (name, idnumber, rfid, is_admin) values (%s, %s, %s, False)"
+			query = "Insert into users (name, idnumber, rfid) values (%s, %s, %s)"
 			cursor.execute(query, (user['name'], user['idnumber'], user['rfid']))
 			connection.commit()
 			return cursor.lastrowid

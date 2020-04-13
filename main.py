@@ -1,5 +1,5 @@
 import os
-from flask_restplus import Api
+from flask_restx  import Api
 from flask import Blueprint
 from flask import Flask
 from flask_script import Manager
