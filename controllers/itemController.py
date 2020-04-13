@@ -1,4 +1,5 @@
 import json
+import time
 from flask import Blueprint, Response, request, jsonify
 from extentions import socket
 from flask_restx  import Resource
@@ -36,11 +37,12 @@ def on_connect():
 def on_connect():
 	print('scan_item sid', request.sid)
 	print('scan_item socket reopened')
-	# barcode = listen_for_barcode()
-	# print(barcode)
-	# item = repository.get_item_by_column('barcodeid', barcode)
-	# if(item != None):
-	# 	emit('scanned_item', item)
+	time.sleep(1)
+	barcode = listen_for_barcode()
+	print(barcode)
+	item = repository.get_item_by_column('barcodeid', barcode)
+	if(item != None):
+		emit('scanned_item', item)
 
 
 # @socket.on('disconnect')

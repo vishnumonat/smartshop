@@ -1,4 +1,5 @@
 import json
+import time
 from flask import Blueprint, Response, request, jsonify
 from extentions import socket
 from flask_restx  import Resource
@@ -36,6 +37,7 @@ def on_connect():
 def on_connect():
 	print('scan_registered_user sid', request.sid)
 	print('scan_registered_user socket reopened')
+	time.sleep(1)
 	rfid = listen_for_barcode()
 	user = repository.get_user_by_column('rfid', rfid)
 	if(user != None):
